@@ -139,35 +139,45 @@ namespace Yorozu.EditorTool
 				return;
 			
 			Gizmos.color = Color;
-			Gizmos.DrawLine(collider.bounds.min, new Vector3(collider.bounds.max.x, collider.bounds.min.y, collider.bounds.min.z));
-			Gizmos.DrawLine(collider.bounds.min, new Vector3(collider.bounds.min.x, collider.bounds.max.y, collider.bounds.min.z));
-			Gizmos.DrawLine(collider.bounds.min, new Vector3(collider.bounds.min.x, collider.bounds.min.y, collider.bounds.max.z));
-			Gizmos.DrawLine(collider.bounds.max, new Vector3(collider.bounds.min.x, collider.bounds.max.y, collider.bounds.max.z));
-			Gizmos.DrawLine(collider.bounds.max, new Vector3(collider.bounds.max.x, collider.bounds.max.y, collider.bounds.min.z));
-			Gizmos.DrawLine(collider.bounds.max, new Vector3(collider.bounds.max.x, collider.bounds.min.y, collider.bounds.max.z));
+			var center = collider.transform.position + collider.center;
+			var rotation = collider.transform.rotation;
+			var min = Vector3.zero;
+			var max = Vector3.zero;
+			for (var i = 0; i < 3; i++)
+			{
+				min[i] = center[i] - collider.size[i] / 2f;
+				max[i] = center[i] + collider.size[i] / 2f;
+			}
+
+			Gizmos.DrawLine(rotation * min, rotation * new Vector3(max.x, min.y, min.z));
+			Gizmos.DrawLine(rotation * min, rotation * new Vector3(min.x, max.y, min.z));
+			Gizmos.DrawLine(rotation * min, rotation * new Vector3(min.x, min.y, max.z));
+			Gizmos.DrawLine(rotation * max, rotation * new Vector3(min.x, max.y, max.z));
+			Gizmos.DrawLine(rotation * max, rotation * new Vector3(max.x, max.y, min.z));
+			Gizmos.DrawLine(rotation * max, rotation * new Vector3(max.x, min.y, max.z));
 			Gizmos.DrawLine(
-				new Vector3(collider.bounds.min.x, collider.bounds.max.y, collider.bounds.min.z),
-				new Vector3(collider.bounds.max.x, collider.bounds.max.y, collider.bounds.min.z)
+				rotation * new Vector3(min.x, max.y, min.z),
+				rotation * new Vector3(max.x, max.y, min.z)
 			);
 			Gizmos.DrawLine(
-				new Vector3(collider.bounds.min.x, collider.bounds.max.y, collider.bounds.min.z),
-				new Vector3(collider.bounds.min.x, collider.bounds.max.y, collider.bounds.max.z)
+				rotation * new Vector3(min.x, max.y, min.z),
+				rotation * new Vector3(min.x, max.y, max.z)
 			);
 			Gizmos.DrawLine(
-				new Vector3(collider.bounds.max.x, collider.bounds.min.y, collider.bounds.min.z),
-				new Vector3(collider.bounds.max.x, collider.bounds.min.y, collider.bounds.max.z)
+				rotation * new Vector3(max.x, min.y, min.z),
+				rotation * new Vector3(max.x, min.y, max.z)
 			);
 			Gizmos.DrawLine(
-				new Vector3(collider.bounds.max.x, collider.bounds.min.y, collider.bounds.min.z),
-				new Vector3(collider.bounds.max.x, collider.bounds.max.y, collider.bounds.min.z)
+				rotation * new Vector3(max.x, min.y, min.z),
+				rotation * new Vector3(max.x, max.y, min.z)
 			);
 			Gizmos.DrawLine(
-				new Vector3(collider.bounds.min.x, collider.bounds.min.y, collider.bounds.max.z),
-				new Vector3(collider.bounds.max.x, collider.bounds.min.y, collider.bounds.max.z)
+				rotation * new Vector3(min.x, min.y, max.z),
+				rotation * new Vector3(max.x, min.y, max.z)
 			);
 			Gizmos.DrawLine(
-				new Vector3(collider.bounds.min.x, collider.bounds.min.y, collider.bounds.max.z),
-				new Vector3(collider.bounds.min.x, collider.bounds.max.y, collider.bounds.max.z)
+				rotation * new Vector3(min.x, min.y, max.z),
+				rotation * new Vector3(min.x, max.y, max.z)
 			);
 		}
 
