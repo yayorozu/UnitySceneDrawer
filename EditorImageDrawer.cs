@@ -11,9 +11,30 @@ namespace Yorozu.EditorTool
 	{
 		private const string MENU_PATH = "Tools/Scene Drawer/Show Image Info";
 
-		private static GUIStyle _style;
 		private static List<UIVertex> _vertexList = new List<UIVertex>();
-		private static FieldInfo _fieldInfo;
+		private static Dictionary<Vector3, List<int>> _dic = new Dictionary<Vector3, List<int>>();
+
+		private static int _cacheId;
+		private static VertexHelper _cacheHelper;
+
+		private static class Cache
+		{
+			public static GUIStyle Style;
+			public static FieldInfo FieldInfo;
+
+			static Cache()
+			{
+				Style = new GUIStyle(GUI.skin.window);
+
+				Style.padding.bottom -= 20;
+				Style.padding.left -= 7;
+				Style.padding.right -= 7;
+				Style.margin = new RectOffset();
+				Style.richText = true;
+
+				FieldInfo = typeof(Graphic).GetField("s_VertexHelper", BindingFlags.NonPublic | BindingFlags.Static);
+			}
+		}
 
 		[MenuItem(MENU_PATH)]
 		private static void MenuAction()
@@ -34,40 +55,33 @@ namespace Yorozu.EditorTool
 			if (!EditorPrefs.GetBool(MENU_PATH, false))
 				return;
 
-			if (_fieldInfo == null)
-				_fieldInfo = typeof(Graphic).GetField("s_VertexHelper", BindingFlags.NonPublic | BindingFlags.Static);
-
-			var helper = _fieldInfo.GetValue(image) as VertexHelper;
-			if (helper == null)
-				return;
-
-			helper.GetUIVertexStream(_vertexList);
-
-			if (_style == null)
+			if (_cacheId != image.GetInstanceID())
 			{
-				_style = new GUIStyle(GUI.skin.window);
+				_cacheHelper = Cache.FieldInfo.GetValue(image) as VertexHelper;
+				if (_cacheHelper == null)
+					return;
 
-				_style.padding.bottom -= 20;
-				_style.padding.left -= 7;
-				_style.padding.right -= 7;
-				_style.margin = new RectOffset();
-				_style.richText = true;
+				_cacheId = image.GetInstanceID();
+				image.SetVerticesDirty();
 			}
 
-			var dic = new Dictionary<Vector3, List<int>>();
+			_cacheHelper.GetUIVertexStream(_vertexList);
+
+			_dic.Clear();
 			for (var index = 0; index < _vertexList.Count; index++)
 			{
 				var pos = image.transform.position + image.transform.rotation * _vertexList[index].position;
-				if (!dic.ContainsKey(pos))
-					dic.Add(pos, new List<int>());
+				if (!_dic.ContainsKey(pos))
+					_dic.Add(pos, new List<int>());
 
-				dic[pos].Add(index);
+				_dic[pos].Add(index);
 			}
 
-			foreach (var pair in dic)
+			foreach (var pair in _dic)
 			{
 				var uv = _vertexList[pair.Value.First()].uv0;
-				Handles.Label(pair.Key, string.Format("u:{0:F1} v:{1:F1}", uv.x, uv.y), _style);
+				var color = ColorUtility.ToHtmlStringRGB(_vertexList[pair.Value.First()].color);
+				Handles.Label(pair.Key, $"<color=#{color}>uv:{uv}</color>", Cache.Style);
 			}
 		}
 	}
