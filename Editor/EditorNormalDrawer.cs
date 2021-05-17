@@ -1,11 +1,14 @@
 using UnityEditor;
 using UnityEngine;
 
-namespace Yorozu.EditorTool
+namespace Yorozu.EditorTool.SceneDrawer
 {
-	public class EditorNormalDrawer
+	/// <summary>
+	/// MeshFilter, SkinnedMeshRenderer の法線を表示
+	/// </summary>
+	internal static class EditorNormalDrawer
 	{
-		private const string MENU_PATH = "Tools/Scene Drawer/Show Mesh Normal";
+		private const string MENU_PATH = SceneDrawerUtility.TOOL_PATH + "Show Mesh Normal";
 
 		[MenuItem(MENU_PATH)]
 		private static void MenuAction()
@@ -51,18 +54,18 @@ namespace Yorozu.EditorTool
 			if (mesh.normals.Length != mesh.vertices.Length)
 				return;
 
-			var rotation = transform.rotation;
-			var position = transform.position;
-			var scale = (transform.localScale.x + transform.localScale.y + transform.localScale.z) / 3;
-
-			Gizmos.color = Color.red;
-			for (var i = 0; i < mesh.vertices.Length; i++)
+			using (new GizmoMatrixScope(transform))
 			{
-				_cache = rotation * mesh.vertices[i];
-				for (var j = 0; j < 3; j++)
-					_cache[j] *= transform.localScale[j];
+				using (new GizmoColorScope(Color.red))
+				{
+					for (var i = 0; i < mesh.vertices.Length; i++)
+					{
+						var pos = mesh.vertices[i];
+						var to = pos + mesh.normals[i].normalized;
 
-				Gizmos.DrawLine(position + _cache, position + _cache + mesh.normals[i] * scale / 10f);
+						Gizmos.DrawLine(pos, to);
+					}
+				}
 			}
 		}
 
