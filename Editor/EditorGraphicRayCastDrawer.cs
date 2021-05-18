@@ -12,7 +12,7 @@ namespace Yorozu.EditorTool.SceneDrawer
 		private const string MENU_PATH = SceneDrawerUtility.TOOL_PATH + "Show Graphic Raycast Overdraw";
 
 		[MenuItem(MENU_PATH)]
-		private static void MenuAction()
+		private static void Menu()
 		{
 			EditorPrefs.SetBool(MENU_PATH, !EditorPrefs.GetBool(MENU_PATH, false));
 		}
@@ -20,7 +20,7 @@ namespace Yorozu.EditorTool.SceneDrawer
 		[MenuItem(MENU_PATH, true)]
 		private static bool MenuValidate()
 		{
-			Menu.SetChecked(MENU_PATH, EditorPrefs.GetBool(MENU_PATH, false));
+			UnityEditor.Menu.SetChecked(MENU_PATH, EditorPrefs.GetBool(MENU_PATH, false));
 			return true;
 		}
 

@@ -11,15 +11,15 @@ namespace Yorozu.EditorTool.SceneDrawer
 		private const string MENU_PATH = SceneDrawerUtility.TOOL_PATH + "Show Camera View";
 
 		[MenuItem(MENU_PATH)]
-		static void MenuAction()
+		private static void Menu()
 		{
 			EditorPrefs.SetBool(MENU_PATH, !EditorPrefs.GetBool(MENU_PATH, false));
 		}
 
 		[MenuItem(MENU_PATH, true)]
-		static bool MenuValidate()
+		private static bool MenuValidate()
 		{
-			Menu.SetChecked(MENU_PATH, EditorPrefs.GetBool(MENU_PATH, false));
+			UnityEditor.Menu.SetChecked(MENU_PATH, EditorPrefs.GetBool(MENU_PATH, false));
 			return true;
 		}
 
