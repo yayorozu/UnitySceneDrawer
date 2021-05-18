@@ -21,7 +21,16 @@ namespace Yorozu.EditorTool.SceneDrawer
 			return true;
 		}
 
-		private static GUIContent content = new GUIContent();
+		private static class Styles
+		{
+			internal static GUIStyle Label;
+
+			static Styles()
+			{
+				Label = new GUIStyle(GUI.skin.button);
+				Label.padding = new RectOffset(0, 0, 0, 0);
+			}
+		}
 
 		[DrawGizmo(GizmoType.NonSelected | GizmoType.Selected)]
 		private static void DrawGizmo(Graphic graphic, GizmoType type)
@@ -29,24 +38,7 @@ namespace Yorozu.EditorTool.SceneDrawer
 			if (!EditorPrefs.GetBool(MENU_PATH, false))
 				return;
 
-			var sceneView = SceneView.currentDrawingSceneView;
-			if (sceneView == null)
-				return;
-
-			var camera = sceneView.camera;
-
-			content.text = graphic.transform.name;
-			var size = GUI.skin.button.CalcSize(content);
-			var screenPoint = camera.WorldToScreenPoint(graphic.transform.position);
-			var buttonRect = new Rect(
-				screenPoint.x - size.x / 2f,
-				sceneView.position.height - screenPoint.y - size.y / 2f,
-				size.x,
-				size.y);
-
-			Handles.BeginGUI();
-			GUI.Button(buttonRect, content.text);
-			Handles.EndGUI();
+			Handles.Label(graphic.transform.position, graphic.transform.name, Styles.Label);
 		}
     }
 }
