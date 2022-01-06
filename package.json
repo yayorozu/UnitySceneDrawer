@@ -1,0 +1,17 @@
+{
+  "name": "yorozu.scene-drawer",
+  "version": "1.0.0",
+  "displayName": "Scene Drawer",
+  "description": "Scene 上に Gizmoを表示して色々わかりやすくするツール",
+  "unity": "2020.3",
+  "keywords": [
+    "EditorTool",
+    "Yorozu",
+    "ProjectWindow"
+  ],
+  "author": {
+    "name": "Yorozu",
+    "email": "hatch.tech.eng@gmail.com",
+    "url": "https://github.com/yayorozu"
+  }
+}
