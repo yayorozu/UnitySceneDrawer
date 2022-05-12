@@ -28,6 +28,9 @@ namespace Yorozu.EditorTool.SceneDrawer
 			if (!EditorPrefs.GetBool(MENU_PATH, false))
 				return;
 
+			if (!collider.enabled)
+				return;
+			
 			using (new GizmoMatrixScope(collider.transform))
 			{
 				var size = collider.size / 2f;
@@ -47,6 +50,9 @@ namespace Yorozu.EditorTool.SceneDrawer
 		{
 			if (!EditorPrefs.GetBool(MENU_PATH, false))
 				return;
+			
+			if (!collider.enabled)
+				return;
 
 			using (new HandlesColorScope(Color))
 			{
@@ -60,6 +66,9 @@ namespace Yorozu.EditorTool.SceneDrawer
 		private static void DrawCapsuleCollider2D(CapsuleCollider2D collider, GizmoType type)
 		{
 			if (!EditorPrefs.GetBool(MENU_PATH, false))
+				return;
+			
+			if (!collider.enabled)
 				return;
 
 			using (new HandlesColorScope(Color))
@@ -109,6 +118,9 @@ namespace Yorozu.EditorTool.SceneDrawer
 		{
 			if (!EditorPrefs.GetBool(MENU_PATH, false))
 				return;
+			
+			if (!collider.enabled)
+				return;
 
 			using (new GizmoMatrixScope(collider.transform))
 			{
@@ -140,6 +152,9 @@ namespace Yorozu.EditorTool.SceneDrawer
 
 			if (collider.sharedMesh == null)
 				return;
+			
+			if (!collider.enabled)
+				return;
 
 			using (new GizmoMatrixScope(collider.transform))
 			{
@@ -155,6 +170,9 @@ namespace Yorozu.EditorTool.SceneDrawer
 		{
 			if (!EditorPrefs.GetBool(MENU_PATH, false))
 				return;
+			
+			if (!collider.enabled)
+				return;
 
 			using (new GizmoMatrixScope(collider.transform))
 			{
@@ -169,6 +187,9 @@ namespace Yorozu.EditorTool.SceneDrawer
 		private static void DrawBoxCollider(BoxCollider collider, GizmoType type)
 		{
 			if (!EditorPrefs.GetBool(MENU_PATH, false))
+				return;
+			
+			if (!collider.enabled)
 				return;
 
 			using (new GizmoMatrixScope(collider.transform))
@@ -222,6 +243,9 @@ namespace Yorozu.EditorTool.SceneDrawer
 		private static void DrawCapsuleCollider(CapsuleCollider collider, GizmoType type)
 		{
 			if (!EditorPrefs.GetBool(MENU_PATH, false))
+				return;
+			
+			if (!collider.enabled)
 				return;
 
 			var top = collider.center;
